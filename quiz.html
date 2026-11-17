@@ -80,16 +80,17 @@
         <!-- 選択肢 -->
         <div id="options-container" class="space-y-2.5 mb-5"></div>
 
+        <!-- 次へボタン -->
+        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black py-3.5 px-4 rounded-xl shadow-lg shadow-orange-950/50 transition-all text-center">
+          つぎの問題へ <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
+
         <!-- 解説表示領域 -->
         <div id="explanation-box" class="hidden rounded-2xl p-4 mb-4 text-sm font-bold">
           <div id="explanation-title" class="flex items-center gap-2 mb-1.5 text-base"></div>
           <div id="explanation-text" class="text-slate-200 font-normal text-xs md:text-sm leading-relaxed"></div>
         </div>
 
-        <!-- 次へボタン -->
-        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black py-3.5 px-4 rounded-xl shadow-lg shadow-orange-950/50 transition-all text-center">
-          つぎの問題へ <i class="fa-solid fa-arrow-right ml-1"></i>
-        </button>
       </div>
     </div>
 
@@ -253,7 +254,7 @@
       q.options.forEach((opt) => {
         const btn = document.createElement('button');
         btn.onclick = () => checkAnswer(opt, btn);
-        btn.className = "w-full flex items-center justify-between p-4 bg-slate-900/70 border-2 border-slate-700 rounded-2xl hover:border-amber-400/80 hover:bg-slate-700/60 text-left font-bold text-base text-slate-100 transition-all shadow-sm active:scale-[0.99]";
+        btn.className = "w-full flex items-center justify-between p-3.5 bg-slate-900/70 border-2 border-slate-700 rounded-2xl hover:border-amber-400/80 hover:bg-slate-700/60 text-left font-bold text-sm text-slate-100 transition-all shadow-sm active:scale-[0.99]";
         
         btn.innerHTML = `
           <span class="pr-3 leading-snug">${opt}</span>
@@ -306,11 +307,11 @@
       if (isCorrect) {
         score++;
         playSound('correct');
-        expBox.className = "rounded-2xl p-4 mb-4 text-sm font-bold bg-emerald-950/60 border border-emerald-500/40 text-emerald-200";
+        expBox.className = "rounded-2xl p-4 text-sm font-bold bg-emerald-950/60 border border-emerald-500/40 text-emerald-200";
         expTitle.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span class="text-emerald-300">せいかい！</span>';
       } else {
         playSound('wrong');
-        expBox.className = "rounded-2xl p-4 mb-4 text-sm font-bold bg-rose-950/60 border border-rose-500/40 text-rose-200";
+        expBox.className = "rounded-2xl p-4 text-sm font-bold bg-rose-950/60 border border-rose-500/40 text-rose-200";
         expTitle.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-400 text-lg"></i> <span class="text-rose-300">ざんねん…</span>';
       }
 
