@@ -3,102 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>クイズに挑戦</title>
+  <title>危険物乙4 合格演習 - クイズに挑戦</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
-    body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@600;700&display=swap');
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #0f172a;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .font-num {
+      font-family: 'Oswald', sans-serif;
+    }
+    /* 危険物・安全標識風の警告ストライプ */
+    .hazard-stripe {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f59e0b,
+        #f59e0b 10px,
+        #1e293b 10px,
+        #1e293b 20px
+      );
+    }
   </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 text-slate-800">
+<body class="min-h-screen flex items-center justify-center p-4 text-slate-100">
 
   <div class="w-full max-w-md mx-auto">
     <!-- クイズ画面 -->
-    <div id="quiz-screen" class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
-      <!-- ヘッダーナビ -->
-      <div class="flex items-center justify-between mb-4">
-        <a href="index.html" class="text-xs font-bold text-slate-500 hover:text-indigo-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
-          <i class="fa-solid fa-house"></i> メニューへ戻る
-        </a>
-        <div class="bg-indigo-50 border border-indigo-200 text-indigo-700 font-extrabold px-3 py-1 rounded-full text-xs flex items-center gap-1.5">
-          <span>正解率:</span>
-          <span id="accuracy-badge">-- %</span>
+    <div id="quiz-screen" class="bg-slate-800/95 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
+      <!-- 上部警告ストライプ -->
+      <div class="h-3 w-full hazard-stripe"></div>
+
+      <div class="p-6 md:p-8">
+        <!-- ヘッダーナビ -->
+        <div class="flex items-center justify-between mb-5">
+          <a href="index.html" class="text-xs font-bold text-slate-300 hover:text-amber-300 bg-slate-900/80 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-house"></i> メニューへ戻る
+          </a>
+          <div class="bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold px-3 py-1 rounded-full text-xs flex items-center gap-1.5">
+            <span>正答率:</span>
+            <span id="accuracy-badge" class="font-num text-sm tracking-wide">-- %</span>
+          </div>
         </div>
-      </div>
 
-      <!-- 進捗メーター -->
-      <div class="mb-6">
-        <div class="flex justify-between text-xs font-bold text-slate-400 mb-1">
-          <span id="progress-text">問題 1 / --</span>
-          <span id="mode-title-badge" class="font-extrabold text-indigo-600">クイズ</span>
+        <!-- 進捗メーター -->
+        <div class="mb-5">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-400 mb-1.5">
+            <span id="progress-text">問題 1 / --</span>
+            <span id="mode-title-badge" class="font-bold text-amber-400 flex items-center gap-1">
+              <i class="fa-solid fa-fire text-[11px]"></i> クイズ
+            </span>
+          </div>
+          <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700/80">
+            <div id="progress-bar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-full w-0 transition-all duration-300"></div>
+          </div>
         </div>
-        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-          <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+
+        <!-- 問題カード（小さめ・左寄せ） -->
+        <div class="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 md:p-6 text-left mb-5 shadow-inner">
+          <div class="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-400/90 uppercase tracking-wider mb-2">
+            <span class="w-4 h-4 rounded bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-[10px]">問</span>
+            <span>QUESTION</span>
+          </div>
+          <!-- 問題文 -->
+          <div id="question-text" class="text-base md:text-lg font-bold text-slate-100 leading-relaxed">読み込み中...</div>
+          <!-- 問題用画像エリア -->
+          <div id="question-image-container" class="hidden mt-4 overflow-hidden rounded-xl border border-slate-700 bg-white">
+            <img id="question-image" src="" alt="問題画像" class="w-full max-h-48 object-contain mx-auto p-2">
+          </div>
         </div>
-      </div>
 
-      <!-- 問題カード -->
-      <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-left mb-6 shadow-inner">
-         <!-- 問題文 -->
-        <div id="question-text" class="text-base md:text-lg font-bold text-slate-800 leading-relaxed">読み込み中...</div>
-        <!-- 問題用画像エリア -->
-        <div id="question-image-container" class="hidden mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <img id="question-image" src="" alt="問題画像" class="w-full max-h-48 object-contain mx-auto p-2">
+        <!-- 選択肢 -->
+        <div id="options-container" class="space-y-2.5 mb-5"></div>
+
+        <!-- 解説表示領域 -->
+        <div id="explanation-box" class="hidden rounded-2xl p-4 mb-4 text-sm font-bold">
+          <div id="explanation-title" class="flex items-center gap-2 mb-1.5 text-base"></div>
+          <div id="explanation-text" class="text-slate-200 font-normal text-xs md:text-sm leading-relaxed"></div>
         </div>
+
+        <!-- 次へボタン -->
+        <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black py-3.5 px-4 rounded-xl shadow-lg shadow-orange-950/50 transition-all text-center">
+          つぎの問題へ <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
       </div>
-
-      <!-- 縦4列選択肢 -->
-      <div id="options-container" class="space-y-3 mb-6"></div>
-
-      <!-- 解説表示領域 -->
-      <div id="explanation-box" class="hidden rounded-xl p-4 mb-4 text-sm font-bold">
-        <div id="explanation-title" class="flex items-center gap-2 mb-1 text-base"></div>
-        <div id="explanation-text" class="text-slate-600 font-normal"></div>
-      </div>
-
-      <!-- 次へボタン -->
-      <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all text-center">
-        つぎの問題へ <i class="fa-solid fa-arrow-right ml-1"></i>
-      </button>
     </div>
 
     <!-- 結果画面 -->
-    <div id="result-screen" class="hidden bg-white rounded-3xl shadow-xl p-6 md:p-8 text-center">
-      <div class="text-5xl mb-3">🎉</div>
-      <h2 class="text-2xl font-black text-slate-800 mb-1">おつかれさまでした！</h2>
-      <p class="text-xs text-slate-400 mb-6">クイズがすべて終わりました</p>
+    <div id="result-screen" class="hidden bg-slate-800/95 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm text-center">
+      <!-- 上部警告ストライプ -->
+      <div class="h-3 w-full hazard-stripe"></div>
 
-      <div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100 grid grid-cols-2 gap-4">
-        <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-          <div class="text-xs text-slate-400 font-bold">正解数</div>
-          <div class="text-2xl font-black text-indigo-600 mt-1"><span id="final-score">0</span> / <span id="final-total">0</span></div>
+      <div class="p-6 md:p-8">
+        <div class="w-16 h-16 mx-auto mb-3 bg-slate-950 border-2 border-amber-400 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+          <span class="text-amber-400 font-black text-3xl leading-none">危</span>
         </div>
-        <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-          <div class="text-xs text-slate-400 font-bold">正解率</div>
-          <div class="text-2xl font-black text-emerald-600 mt-1" id="final-accuracy">0%</div>
-        </div>
-      </div>
 
-      <div class="space-y-3">
-        <button onclick="restartQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all">
-          <i class="fa-solid fa-rotate-right mr-1"></i> もういちど挑戦する
-        </button>
-        <a href="index.html" class="block w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl transition-all">
-          <i class="fa-solid fa-house mr-1"></i> メニューへ戻る
-        </a>
+        <div id="pass-badge" class="inline-block px-3 py-1 rounded-full text-xs font-black tracking-wider mb-2">
+          判定中
+        </div>
+        <h2 class="text-2xl font-black text-white mb-1">演習おつかれさまでした！</h2>
+        <p class="text-xs text-slate-400 mb-6">合格基準は各科目 <span class="text-amber-400 font-bold">60%以上</span> の正答です</p>
+
+        <div class="bg-slate-900/80 rounded-2xl p-4 mb-6 border border-slate-700/80 grid grid-cols-2 gap-3.5">
+          <div class="bg-slate-800/90 p-3.5 rounded-xl border border-slate-700">
+            <div class="text-xs text-slate-400 font-bold">正解数</div>
+            <div class="font-num text-2xl font-bold text-amber-400 mt-1">
+              <span id="final-score">0</span> <span class="text-sm text-slate-400">/ <span id="final-total">0</span></span>
+            </div>
+          </div>
+          <div class="bg-slate-800/90 p-3.5 rounded-xl border border-slate-700">
+            <div class="text-xs text-slate-400 font-bold">正答率</div>
+            <div class="font-num text-2xl font-bold text-emerald-400 mt-1" id="final-accuracy">0%</div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <button onclick="restartQuiz()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black py-3.5 px-4 rounded-xl shadow-lg shadow-orange-950/50 transition-all">
+            <i class="fa-solid fa-rotate-right mr-1"></i> もういちど挑戦する
+          </button>
+          <a href="index.html" class="block w-full bg-slate-900/90 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl transition-all">
+            <i class="fa-solid fa-house mr-1"></i> メニューへ戻る
+          </a>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
     const modeTitles = {
-      questions_hazmat_mock_exam_1: "mogi",
+      questions_hazmat_mock_exam_1_1: "模擬試験（筆記）",
       questions_2_knowledge_of_Hunting_Implements: "猟具に関する知識",
       questions_3_knowledge_of_Wildlife: "鳥獣に関する知識",
       questions_4_wildlife_Protection_and_Management: "保護及び管理",
-      questions_5_Wildlife_Identification:"鳥獣の判別"
+      questions_5_Wildlife_Identification: "鳥獣の判別"
     };
 
     let questions = [];
@@ -151,9 +193,9 @@
     // 初期化：URLから mode を取得し、対応するJSONを読み込む
     window.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const mode = urlParams.get('mode') || 'questions_1_relevant_Laws_and_Regulations';
+      const mode = urlParams.get('mode') || 'questions_hazmat_mock_exam_1';
       
-      document.getElementById('mode-title-badge').innerText = modeTitles[mode] || "クイズ";
+      document.getElementById('mode-title-badge').innerHTML = `<i class="fa-solid fa-fire text-[11px]"></i> ${modeTitles[mode] || "クイズ"}`;
 
       const jsonFileName = `${mode}.json`;
 
@@ -211,11 +253,11 @@
       q.options.forEach((opt) => {
         const btn = document.createElement('button');
         btn.onclick = () => checkAnswer(opt, btn);
-        btn.className = "w-full flex items-center justify-between p-4 bg-white border-2 border-slate-200 rounded-2xl hover:border-indigo-400 hover:bg-indigo-50/30 text-left font-bold text-lg text-slate-700 transition-all shadow-sm active:scale-[0.99]";
+        btn.className = "w-full flex items-center justify-between p-4 bg-slate-900/70 border-2 border-slate-700 rounded-2xl hover:border-amber-400/80 hover:bg-slate-700/60 text-left font-bold text-base text-slate-100 transition-all shadow-sm active:scale-[0.99]";
         
         btn.innerHTML = `
-          <span>${opt}</span>
-          <div class="w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center icon-indicator">
+          <span class="pr-3 leading-snug">${opt}</span>
+          <div class="w-6 h-6 rounded-full border-2 border-slate-600 flex items-center justify-center shrink-0 icon-indicator">
             <div class="w-2.5 h-2.5 rounded-full bg-transparent"></div>
           </div>
         `;
@@ -237,21 +279,23 @@
 
       buttons.forEach(btn => {
         btn.disabled = true;
-        btn.classList.remove('hover:border-indigo-400', 'hover:bg-indigo-50/30');
+        btn.classList.remove('hover:border-amber-400/80', 'hover:bg-slate-700/60');
         const optText = btn.querySelector('span').innerText;
 
         if (String(optText) === String(q.answer)) {
-          btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+          btn.classList.remove('bg-slate-900/70', 'border-slate-700', 'text-slate-100');
+          btn.classList.add('border-emerald-500', 'bg-emerald-950/70', 'text-emerald-200');
           const indicator = btn.querySelector('.icon-indicator');
-          indicator.className = "w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs";
+          indicator.className = "w-6 h-6 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs shrink-0";
           indicator.innerHTML = '<i class="fa-solid fa-check"></i>';
         } else if (btn === clickedBtn && !isCorrect) {
-          btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+          btn.classList.remove('bg-slate-900/70', 'border-slate-700', 'text-slate-100');
+          btn.classList.add('border-rose-500', 'bg-rose-950/70', 'text-rose-200');
           const indicator = btn.querySelector('.icon-indicator');
-          indicator.className = "w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs";
+          indicator.className = "w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs shrink-0";
           indicator.innerHTML = '<i class="fa-solid fa-xmark"></i>';
         } else {
-          btn.classList.add('opacity-50');
+          btn.classList.add('opacity-40');
         }
       });
 
@@ -262,12 +306,12 @@
       if (isCorrect) {
         score++;
         playSound('correct');
-        expBox.className = "rounded-xl p-4 mb-4 text-sm font-bold bg-emerald-50 border border-emerald-200 text-emerald-900";
-        expTitle.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i> せいかい！';
+        expBox.className = "rounded-2xl p-4 mb-4 text-sm font-bold bg-emerald-950/60 border border-emerald-500/40 text-emerald-200";
+        expTitle.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span class="text-emerald-300">せいかい！</span>';
       } else {
         playSound('wrong');
-        expBox.className = "rounded-xl p-4 mb-4 text-sm font-bold bg-rose-50 border border-rose-200 text-rose-900";
-        expTitle.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600 text-lg"></i> ざんねん…';
+        expBox.className = "rounded-2xl p-4 mb-4 text-sm font-bold bg-rose-950/60 border border-rose-500/40 text-rose-200";
+        expTitle.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-400 text-lg"></i> <span class="text-rose-300">ざんねん…</span>';
       }
 
       expText.innerText = q.explanation || '';
@@ -294,7 +338,20 @@
       document.getElementById('final-total').innerText = questions.length;
 
       const rate = Math.round((score / questions.length) * 100);
-      document.getElementById('final-accuracy').innerText = `${rate}%`;
+      const accuracyEl = document.getElementById('final-accuracy');
+      const passBadge = document.getElementById('pass-badge');
+
+      accuracyEl.innerText = `${rate}%`;
+
+      if (rate >= 60) {
+        accuracyEl.className = "font-num text-2xl font-bold text-emerald-400 mt-1";
+        passBadge.className = "inline-block bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-3 py-1 rounded-full text-xs font-black tracking-wider mb-2";
+        passBadge.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> 合格ライン（60%）突破！';
+      } else {
+        accuracyEl.className = "font-num text-2xl font-bold text-rose-400 mt-1";
+        passBadge.className = "inline-block bg-rose-500/20 border border-rose-500/40 text-rose-300 px-3 py-1 rounded-full text-xs font-black tracking-wider mb-2";
+        passBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> 合格ラインまであと一歩！';
+      }
 
       if (rate === 100) {
         playSound('clear');

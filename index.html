@@ -3,70 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>乙４クイズ - メニュー</title>
+  <title>危険物乙4 合格演習 - メニュー</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap');
-    body { font-family: 'M PLUS Rounded 1c', sans-serif; }
-    .font-info { font-family: 'Noto Sans JP', sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&family=Oswald:wght@600;700&display=swap');
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #0f172a;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .font-num {
+      font-family: 'Oswald', sans-serif;
+    }
+    /* 危険物・安全標識風の警告ストライプ */
+    .hazard-stripe {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f59e0b,
+        #f59e0b 10px,
+        #1e293b 10px,
+        #1e293b 20px
+      );
+    }
   </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 text-slate-800">
+<body class="min-h-screen flex items-center justify-center p-4 text-slate-100">
 
-  <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-6 md:p-8">
-    <div class="text-center mb-6">
-      <span class="inline-block bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-full text-xs tracking-wider uppercase mb-2">わな猟免許クイズ</span>
-      <h1 class="text-2xl font-extrabold text-slate-800">挑戦するジャンルを選んでね
-      </h1>
-    </div>
+  <div class="w-full max-w-md bg-slate-800/95 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
+    <!-- 上部警告ストライプ -->
+    <div class="h-3 w-full hazard-stripe"></div>
 
-    <!-- 4つのボタンの上に小さく「test1」を表示 -->
-    <div class="text-xs font-bold text-slate-400 mb-2">１．模擬試験（筆記）</div>
-
-    <div class="grid grid-cols-1 gap-4">
-      <a href="quiz.html?mode=questions_hazmat_mock_exam_1" class="group flex items-center justify-between p-4 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
-        <div class="text-left">
-          <div class="font-extrabold text-lg">法令(15問)</div>
-          <div class="text-xs text-white/80">本番15問</div>
+    <div class="p-6 md:p-8">
+      <!-- ヘッダーエリア -->
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <!-- 危険物標識風「危」マーク -->
+        <div class="w-12 h-12 bg-slate-950 border-2 border-amber-400 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
+          <span class="text-amber-400 font-black text-2xl leading-none">危</span>
         </div>
-        <i class="fa-solid fa-chevron-right text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
-      </a>
-
-      <a href="quiz.html?mode=questions_hazmat_mock_exam_1" class="group flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
         <div class="text-left">
-          <div class="font-extrabold text-lg">基礎的な物理・化学(10問)</div>
-          <div class="text-xs text-white/80">本番10問</div>
+          <span class="inline-block bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold px-2.5 py-0.5 rounded text-[11px] tracking-wider">
+            HAZMAT CLASS 4 / 危険物取扱者
+          </span>
+          <h1 class="text-xl md:text-2xl font-black text-white tracking-tight mt-0.5">
+            乙種第4類 合格演習
+          </h1>
         </div>
-        <i class="fa-solid fa-chevron-right text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
-      </a>
+      </div>
 
-      <a href="quiz.html?mode=questions_hazmat_mock_exam_1" class="group flex items-center justify-between p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
-        <div class="text-left">
-          <div class="font-extrabold text-lg">消化方法(10問)</div>
-          <div class="text-xs text-white/80">本番10問</div>
+      <p class="text-center text-xs text-slate-400 mb-6">
+        全科目 <span class="text-amber-400 font-bold">60%以上</span> の正答で合格！挑戦する分野を選択してください
+      </p>
+
+      <!-- セクション見出し -->
+      <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-2.5 px-1">
+        <span><i class="fa-solid fa-fire text-amber-500 mr-1.5"></i>模擬試験❶</span>
+        <span class="text-[11px] text-slate-500">全35問構成</span>
+      </div>
+
+      <!-- 科目選択ボタン -->
+      <div class="grid grid-cols-1 gap-3.5">
+        <!-- 法令 -->
+        <a href="quiz.html?mode=questions_hazmat_mock_exam_1_1" class="group relative flex items-center justify-between p-4 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white rounded-2xl shadow-lg shadow-rose-950/50 border border-rose-400/30 transform hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-black/20 flex items-center justify-center text-xl shrink-0">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-black text-base md:text-lg leading-tight">危険物に関する法令</div>
+              <div class="text-xs text-rose-100 mt-0.5">
+                本番 <span class="font-num font-bold text-sm">15</span> 問 ／ 合格ライン <span class="font-num font-bold text-sm">9</span> 問以上
+              </div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+        </a>
+
+        <!-- 物理・化学 -->
+        <a href="quiz.html?mode=questions_hazmat_mock_exam_1_2" class="group relative flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl shadow-lg shadow-indigo-950/50 border border-blue-400/30 transform hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-black/20 flex items-center justify-center text-xl shrink-0">
+              <i class="fa-solid fa-flask"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-black text-base md:text-lg leading-tight">基礎的な物理・化学</div>
+              <div class="text-xs text-blue-100 mt-0.5">
+                本番 <span class="font-num font-bold text-sm">10</span> 問 ／ 合格ライン <span class="font-num font-bold text-sm">6</span> 問以上
+              </div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+        </a>
+
+        <!-- 性質・消火 -->
+        <a href="quiz.html?mode=questions_hazmat_mock_exam_1_3" class="group relative flex items-center justify-between p-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-2xl shadow-lg shadow-orange-950/50 border border-amber-300/30 transform hover:-translate-y-0.5 transition-all">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-black/20 flex items-center justify-center text-xl shrink-0">
+              <i class="fa-solid fa-fire-extinguisher"></i>
+            </div>
+            <div class="text-left">
+              <div class="font-black text-base md:text-lg leading-tight">性質・火災予防・消火方法</div>
+              <div class="text-xs text-amber-100 mt-0.5">
+                本番 <span class="font-num font-bold text-sm">10</span> 問 ／ 合格ライン <span class="font-num font-bold text-sm">6</span> 問以上[cite: 2]
+              </div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+        </a>
+      </div>
+
+      <div class="text-[11px] font-bold text-slate-400 text-right mt-2 mb-4">出典：赤本</div>
+
+      <!-- 試験概要セクション -->
+      <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-700/80 text-xs text-slate-300 leading-relaxed">
+        <div class="flex items-center gap-1.5 font-bold text-amber-400 mb-1.5">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>危険物乙種４類 試験概要（筆記120分・5択35問）</span>
         </div>
-        <i class="fa-solid fa-chevron-right text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
-      </a>
-    <div class="text-xs font-bold text-slate-800 text-right my-1">出典：赤本</div>
-
-
-    <!-- 試験概要の追記セクション -->
-    <hr class="border-t-2 border-dotted border-slate-300 my-1">
-
-    <div class="font-info text-xs text-slate-600 bg-slate-50 rounded-2xl p-4 space-y-4 leading-relaxed border border-slate-200/70">
-      <div>
-        <div class="font-bold text-slate-700 mb-2">危険物乙種４類試験概要</div>
-        <div class="font-bold text-slate-700 mb-1">知識試験（筆記120分・５択マークシート35問）</div>
-        <ul class="space-y-0.5 pl-1">
-          <li>- 合格基準：各分野正答率60%以上</li>
-          <li>① 法令：15問（12問以上の正解で合格）</li>
-          <li>② 基礎的な物理・化学：10問（6問以上の正解で合格）</li>
-          <li>③ 鳥獣に関する知識問：10問（6問以上の正解で合格）</li>
+        <p class="text-[11px] text-slate-400 mb-2">※ 3科目すべてで正答率60%以上をとることが合格条件です。</p>
+        <ul class="space-y-1 text-slate-300 pl-1">
+          <li class="flex justify-between border-b border-slate-800 pb-1">
+            <span>① 法令</span>
+            <span class="font-bold text-white">15問（9問以上で合格）</span>
+          </li>
+          <li class="flex justify-between border-b border-slate-800 pb-1">
+            <span>② 基礎的な物理・化学</span>
+            <span class="font-bold text-white">10問（6問以上で合格）</span>
+          </li>
+          <li class="flex justify-between">
+            <span>③ 性質・火災予防・消火方法</span>
+            <span class="font-bold text-white">10問（6問以上で合格）</span>
+          </li>
         </ul>
       </div>
     </div>
-
   </div>
 
 </body>
